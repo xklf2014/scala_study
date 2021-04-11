@@ -28,14 +28,14 @@ object StudySql01_basic {
     //f3(session,sc)
     //f4(session,sc)
 
-    val ds01 = session.read.textFile("E:\\java_study\\scala_study\\data\\person.txt")
+    val ds01 = session.read.textFile("data/person.txt")
     val person = ds01.map(line => {
       val strs = line.split(" ")
       (strs(0),strs(1).toInt)
     })(Encoders.tuple(Encoders.STRING,Encoders.scalaInt))
 
     //import session.implicits._
-   /* val ds01 = session.read.textFile("E:\\java_study\\scala_study\\data\\person.txt")
+   /* val ds01 = session.read.textFile("data/person.txt")
     val person = ds01.map(line => {
       val strs = line.split(" ")
       (strs(0),strs(1).toInt)
@@ -74,7 +74,7 @@ object StudySql01_basic {
   }
 
   def f2(session: SparkSession,sc: SparkContext): Unit ={
-    val data = sc.textFile("E:\\java_study\\scala_study\\data\\person.txt")
+    val data = sc.textFile("data/person.txt")
     val rowRdd = data.map(_.split(" ")).map(arr => Row.apply(arr(0),arr(1).toInt))
 
     val fields = Array(
@@ -91,7 +91,7 @@ object StudySql01_basic {
   }
 
   def f3(session:SparkSession,sc:SparkContext): Unit ={
-    val data = sc.textFile("E:\\java_study\\scala_study\\data\\person.txt")
+    val data = sc.textFile("data/person.txt")
     val userSchema = Array(
       "name string",
       "age int",
@@ -126,7 +126,7 @@ object StudySql01_basic {
   }
 
   def f4(session:SparkSession,sc:SparkContext): Unit ={
-    val data = sc.textFile("E:\\java_study\\scala_study\\data\\person.txt")
+    val data = sc.textFile("data/person.txt")
     val rddPerson = data.map(_.split(" ")).map(
       arr => {
         val p = new Person
