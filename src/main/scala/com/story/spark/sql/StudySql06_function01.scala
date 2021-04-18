@@ -55,18 +55,45 @@ object StudySql06_function01 {
       " else '差' end "
       ).show()*/
 
- /*   session.sql("select name," +
-      " explode(split(concat(" +
-      " case when class = 1 then 'one' else 'two' end,' ',score),' ')) " +
-      " from users").show()*/
+    /*   session.sql("select name," +
+         " explode(split(concat(" +
+         " case when class = 1 then 'one' else 'two' end,' ',score),' ')) " +
+         " from users").show()*/
 
     //开窗函数
-/*    session.sql(
-      "select * from (select class,score, " +
-      " rank() over(partition by class order by score desc) rk" +
-      " from users) rs where rs.rk <=3").show()*/
+    /*    session.sql(
+          "select * from (select class,score, " +
+          " rank() over(partition by class order by score desc) rk" +
+          " from users) rs where rs.rk <=3").show()*/
 
-    session.sql("select *,count(score) over(partition by class) as n from users").show()
+    //session.sql("select *,count(score) over(partition by class) as n from users").show()
+
+    /*    val res = session.sql("" +
+          "select t1.name,t1.class,t2.score " +
+          "" +
+          " from " +
+          " (select name,class from users) as t1 " +
+          " join " +
+          " (select name,score from users) as t2 " +
+          " on t1.name = t2.name " +
+          " where t2.score > 60"
+        )*/
+
+    //score#34 + 100   优化成+100，减少一次cpu计算
+    val res = session.sql("" +
+      "select t1.name,t1.class,t2.score+20+80 " +
+      "" +
+      " from " +
+      " (select name,class from users) as t1 " +
+      " join " +
+      " (select name,score from users) as t2 " +
+      " on t1.name = t2.name " +
+      " where t2.score > 60"
+    )
+    res.show()
+    println("-----------------")
+    res.explain(true)
+
   }
 
   class MyAvgFun extends UserDefinedAggregateFunction {
